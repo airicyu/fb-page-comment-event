@@ -1,0 +1,53 @@
+{
+  "name": "fb-page-comment-event",
+  "version": "0.0.1",
+  "description": "Run a schedule job to track your Facebook page Posts' comment/reply events.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/airicyu/fb-page-comment-event"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "nyc mocha",
+    "coverage": "nyc report --reporter=text-lcov > coverage/icov.info && codecov --file=./coverage/lcov.info"
+  },
+  "author": "Eric Yu",
+  "email": "airic.yu@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "request": "^2.83.0",
+    "winston": "^3.0.0-rc1"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1",
+    "nyc": "^11.3.0"
+  },
+  "engines": {
+    "node": "7 || 8"
+  },
+  "keywords": [
+    "Facebook"
+  ],
+  "nyc": {
+    "check-coverage": true,
+    "per-file": false,
+    "lines": 50,
+    "statements": 50,
+    "functions": 50,
+    "branches": 50,
+    "include": [
+      "src/**.js"
+    ],
+    "exclude": [],
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ],
+    "require": [],
+    "extension": [],
+    "cache": true,
+    "all": true,
+    "report-dir": "./coverage"
+  }
+}
