@@ -8,6 +8,13 @@
 [![dependencies Status](https://david-dm.org/airicyu/fb-page-comment-event/status.svg)](https://david-dm.org/airicyu/fb-page-comment-event)
 [![devDependencies Status](https://david-dm.org/airicyu/fb-page-comment-event/dev-status.svg)](https://david-dm.org/airicyu/fb-page-comment-event?type=dev)
 
+## Project Page
+- [My Blog](http://blog.airic-yu.com/2286/fb-page-comment-event)
+- [Github](https://github.com/airicyu/fb-page-comment-event)
+- [NPM](https://www.npmjs.com/package/fb-page-comment-event)
+
+------------------------
+
 ## Description
 
 This module would run a schedule job to track your Facebook page Posts' comment/reply events.
@@ -54,3 +61,8 @@ Sample console log output:
     commentId: 'yyyyyy',
     link: 'http://www.facebook.com/permalink.php?story_fbid=xxxxxx&id=aaaaaa&comment_id=cccccc' } ]
 ```
+
+------------------------
+## Author
+
+- Eric Yu: airic.yu@gmail.com
