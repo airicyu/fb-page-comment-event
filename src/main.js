@@ -11,21 +11,20 @@ const loggerHolder = require('./utils/logger-holder');
 const getFbPageCommentEventApp = function (options) {
     options.fbApiVersion = options.fbApiVersion || defaultFbApiVersion;
 
-    let queryNotificationAgent = require('./fbApi/query-notification')({
+    let queryFeedAgent = require('./fbApi/query-feed')({
         fbApiVersion: options.fbApiVersion,
         pageId: options.pageId,
         accessToken: options.accessToken
-    });
+    })
 
-    let notificationFetcher = require('./utils/notification-fetcher')(queryNotificationAgent);
+    let feedFetcher = require('./utils/feed-fetcher')(queryFeedAgent);
 
-    let notificationDigestor = require('./utils/notification-digestor')();
+    let feedDigestor = require('./utils/feed-digestor')();
 
     let fbPageCommentEventApp = {
         options,
-        queryNotificationAgent,
-        notificationFetcher,
-        notificationDigestor,
+        feedFetcher,
+        feedDigestor,
         run: null,
         stop: null,
         getQueryAgent: transportAgentHolder.getAgent,
@@ -41,9 +40,9 @@ const getFbPageCommentEventApp = function (options) {
         let self = this;
 
         let refetch = async function () {
-            let newItems = await self.notificationFetcher.fetch();
+            let newItems = await self.feedFetcher.fetch();
             if (newItems && newItems.length) {
-                let events = await self.notificationDigestor.digest(newItems);
+                let events = await self.feedDigestor.digest(newItems);
                 if (events && events.length) {
                     return Promise.resolve(eventsCallback(events));
                 }
@@ -56,13 +55,15 @@ const getFbPageCommentEventApp = function (options) {
         }catch(e){
             console.log(e)
         }
-        self.scheduleJobTimer = setInterval(refetch, 30000);
+        self.scheduleJobTimer = setInterval(refetch, 30*1000);
         return;
     }
 
-    fbPageCommentEventApp.stop = async function (eventsCallback) {
+    fbPageCommentEventApp.stop = async function () {
         let self = this;
         clearTimeout(self.scheduleJobTimer);
+        self.scheduleJobTimer = null;
+        return;
     }
 
     return fbPageCommentEventApp;

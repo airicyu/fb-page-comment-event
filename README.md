@@ -17,9 +17,9 @@
 
 ## Description
 
-This module would run a schedule job to track your Facebook page Posts' comment/reply events.
+This module would run a schedule job to track your Facebook page Posts' comment events.
 
-What it would do is periodically call Facebook Graph API to track your Facebook page notification updates. It would check whether there are new comment or reply in your Facebook page. If it find new comment/reply events, it will call your custom callback function.
+What it would do is periodically call Facebook Graph API to track your Facebook page recent feed updates. It would check whether there are new comment in your Facebook page. If it find new comments from these posts, it would generate events and trigger your custom callback function.
 
 ------------------------
 
@@ -36,30 +36,35 @@ const fbPageCommentEventApp = require('fb-page-comment-event')({
 });
 
 fbPageCommentEventApp.run((events)=>{
-    console.log(events);
+    console.log(JSON.stringify(events, null, 2));
 });
 ```
 
-* Remarks: `PageId` is the facebook page ID. `accessToken` is a Facebook page access token which Facebook page owner can generate in developer dashboard.
+* Remarks: `PageId` is the facebook page ID. `accessToken` is the Facebook page access token(remember to use the long live token) which Facebook page owner can generate in developer dashboard.
 
 
 Sample console log output:
 
 ```
 >node sample.js
-{"message":"2017-12-20T18:32:10.821Z: Fetching new notification items which newer than lastCheckedItemUpdateTime(2017-12-20T18:32:10.777Z).","level":"info"}
-{"message":"2017-12-20T18:32:11.112Z: Fetched 0 new notification items. \"newLastCheckedItemUpdateTime\" reset to 2017-12-20T17:43:09.000Z.","level":"info"}
-{"message":"2017-12-20T18:32:41.113Z: Fetching new notification items which newer than lastCheckedItemUpdateTime(2017-12-20T17:43:09.000Z).","level":"info"}
-{"message":"2017-12-20T18:32:41.383Z: Fetched 2 new notification items. \"newLastCheckedItemUpdateTime\" reset to 2017-12-20T18:32:31.000Z.","level":"info"}
-[ { eventType: 'reply_comment',
-    postId: 'xxxxxx',
-    commentId: 'yyyyyy',
-    replyCommentId: 'zzzzzz',
-    link: 'http://www.facebook.com/permalink.php?story_fbid=xxxxxx&id=aaaaaa&comment_id=cccccc&reply_comment_id=dddddd' },
-  { eventType: 'comment',
-    postId: 'xxxxxx',
-    commentId: 'yyyyyy',
-    link: 'http://www.facebook.com/permalink.php?story_fbid=xxxxxx&id=aaaaaa&comment_id=cccccc' } ]
+{"message":"2017-12-21T19:18:48.701Z: Fetching feed items with comments newer than lastScannedCommentTime(2017-12-21T19:14:18.000Z).","level":"info"}
+{"message":"2017-12-21T19:18:48.960Z: Fetched and filtered and returning 1 feed items which containing new comments. \"newLastScannedCommentTime\" reset to 2017-12-21T19:14:18.000Z.","level":"info"}
+[
+  {
+    "eventType": "comment",
+    "data": {
+      "postId": "xxxxxx",
+      "commentId": "yyyyyy",
+      "from": {
+        "name": "zzzzzz",
+        "id": "aaaaaa"
+      },
+      "commentCreateTime": 1513883658000,
+      "message": "test comment",
+      "link": "https://www.facebook.com/permalink.php?story_fbid=xxxxxx&id=aaaaaa&comment_id=cccccc"
+    }
+  }
+]
 ```
 
 ------------------------

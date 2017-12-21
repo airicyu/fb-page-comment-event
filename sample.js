@@ -6,5 +6,5 @@ const fbPageCommentEventApp = require('./src/main.js')({
 });
 
 fbPageCommentEventApp.run((events)=>{
-    console.log(events);
+    console.log(JSON.stringify(events, null, 2));
 });

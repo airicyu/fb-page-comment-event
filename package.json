@@ -1,6 +1,6 @@
 {
   "name": "fb-page-comment-event",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Run a schedule job to track your Facebook page Posts' comment/reply events.",
   "repository": {
     "type": "git",

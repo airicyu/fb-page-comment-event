@@ -4,18 +4,19 @@
 
 const _store = {};
 _store['lastNotificationUpdateTime'] = Date.now();
+_store['lastScannedCommentTime'] = Math.round(Date.now()/1000);
 
 const store = {
-    getLastNotificationUpdateTime: null,
-    setLastNotificationUpdateTime: null
+    getLastScannedCommentTime: null,
+    setLastScannedCommentTime: null
 };
 
-store.getLastNotificationUpdateTime = async function () {
-    return _store['lastNotificationUpdateTime'];
+store.getLastScannedCommentTime = async function () {
+    return _store['lastScannedCommentTime'];
 };
 
-store.setLastNotificationUpdateTime = async function (value) {
-    _store['lastNotificationUpdateTime'] = value;
+store.setLastScannedCommentTime = async function (value) {
+    _store['lastScannedCommentTime'] = value;
     return;
 };
 
