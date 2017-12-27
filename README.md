@@ -55,23 +55,23 @@ Sample console log output:
 
 ```
 >node sample.js
-{"message":"2017-12-21T19:18:48.701Z: Fetching feed items with comments newer than lastScannedCommentTime(2017-12-21T19:14:18.000Z).","level":"info"}
-{"message":"2017-12-21T19:18:48.960Z: Fetched and filtered and returning 1 feed items which containing new comments. \"newLastScannedCommentTime\" reset to 2017-12-21T19:14:18.000Z.","level":"info"}
-[
-  {
-    "eventType": "comment",
-    "data": {
-      "postId": "xxxxxx",
-      "commentId": "yyyyyy",
-      "from": {
-        "name": "zzzzzz",
-        "id": "aaaaaa"
-      },
-      "commentCreateTime": 1513883658000,
-      "message": "test comment",
-      "link": "https://www.facebook.com/permalink.php?story_fbid=xxxxxx&id=aaaaaa&comment_id=cccccc"
-    }
-  }
+{"message":"2017-12-21T19:18:48.701Z: Fetching post xxxxx_yyyyy with comments newer than (since=1514403141, time=2017-12-27T19:32:21.000Z).","level":"info"}
+{"message":"2017-12-21T19:18:48.960Z: Fetched post xxxxx_yyyyy and filtered and returning 1 feed items which containing new comments. \"newLastScannedCommentTime\" reset to 2017-12-21T19:14:18.000Z.","level":"info"} 
+[{
+		"eventType": "comment",
+		"data": {
+			"pageId": "xxxxx",
+			"postId": "yyyyy",
+			"commentId": "zzzzz",
+			"from": {
+				"name": "John Chan",
+				"id": "bbb"
+			},
+			"commentCreateTime": 1513883658000,
+			"message": "test comment",
+			"link": "https://www.facebook.com/permalink.php?story_fbid=yyyyy&id=xxxxx&comment_id=zzzzz"
+		}
+	}
 ]
 ```
 ------------------------
