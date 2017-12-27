@@ -17,30 +17,38 @@
 
 ## Description
 
-This module would run a schedule job to track your Facebook page Posts' comment events.
+This module can keep track your Facebook page posts' first level comment events. Hence, if someone commented on your post, you will be notified by an event.
 
-What it would do is periodically call Facebook Graph API to track your Facebook page recent feed updates. It would check whether there are new comment in your Facebook page. If it find new comments from these posts, it would generate events and trigger your custom callback function.
+This module support running an event-engine which would manage a background schedule job to check new comment and generating events.
+This module also support raw APIs which you can check new comments and digest as events by yourself via APIs.
 
 ------------------------
 
-## Samples
+## Running the event engine
 
-### Starting the event engine:
+You may use the `lib.pageCommentEventApp(options)` API to get a event engine app and then start it with `run` function. This event engine app would manage a schedule job to auto pull data.
+
+Sample:
 
 ```javascript
 'use strict';
 
-const fbPageCommentEventApp = require('fb-page-comment-event')({
-    pageId : 'xxxxxx',
-    accessToken : 'yyyyyy'
+let fbPageCommentEventLib = require('fb-page-comment-event');
+
+const pageCommentEventApp = fbPageCommentEventLib.pageCommentEventApp({
+    accessToken: 'EAASHAlSbbMUBALwwZCxZB1T7eDvFZBR......GQfNPb5Bxo5b2wdzMb45gJxcdZAFOQZDZD',
+    pullInterval: 15 * 1000
 });
 
-fbPageCommentEventApp.run((events)=>{
+pageCommentEventApp.registerMonitorPost({ pageId: 'xxxxx', postId: 'yyyyy' });
+
+pageCommentEventApp.run((events) => {
     console.log(JSON.stringify(events, null, 2));
+    return;
 });
 ```
 
-* Remarks: `PageId` is the facebook page ID. `accessToken` is the Facebook page access token(remember to use the long live token) which Facebook page owner can generate in developer dashboard.
+* Remarks: `pageId` is the facebook page ID. `postId` is the facebook page post ID of post which you want to monitor its comment. `accessToken` is the Facebook page access token(remember to use the long live token) which Facebook page owner can generate in developer dashboard.
 
 
 Sample console log output:
@@ -66,8 +74,155 @@ Sample console log output:
   }
 ]
 ```
+------------------------
+
+## (DIY) Use the APIs to check new comments and generating events
+
+Sample:
+
+```javascript
+let fbPageCommentEventLib = require('fb-page-comment-event');
+
+let pageId = 'aaa';
+let postId = 'bbb';
+let accessToken = 'XXX...ZZZ';
+
+let postDigestor = lib.api.getPostDigestor();
+
+let since = Math.trunc(Date.now() / 1000) - 10 * 60; //since 10 minutes before
+
+(async function () {
+
+    let queryPostCommentAgent = lib.api.getQueryPostCommentAgent({ accessToken }); //initialize query agent with access token
+    let postCommentFetcher = lib.api.getPostCommentFetcher(queryPostCommentAgent); //initial comment fetcher
+
+    let postWithNewComments = await postCommentFetcher.fetch(`${pageId}_${postId}`, since); //fetch target post with new comments
+    let postWithNewCommentEvents = await postDigestor.digest(postWithNewComments); //digest the post object into new comment events
+
+    console.log(`postWithNewCommentEvents: ${JSON.stringify(postWithNewCommentEvents, null, 2)}`);
+})();
+
+```
 
 ------------------------
+
+## event engine APIs
+
+### let app = lib.pageCommentEventApp({accessToken, pullInterval})
+
+Description:
+
+Initializing the event engine app.
+
+parameters:
+
+- accessToken: The required accessToken(need permission `manage_pages`) for the API calls.
+- pullInterval: The sleep time(ms) interval between each scheduled page post new comment checking.
+
+return:
+
+The event engine app.
+
+### app.registerMonitorPost({pageId, postId})
+
+Description:
+
+Registering a page post which the event engine would tracking for new comments
+
+parameters:
+
+- pageId: The page ID.
+- postId: The post ID.
+
+### app.run(eventsCallback)
+
+Description:
+
+Start running the event engine and register the new-comment-events callback. Once users write new comments, new-comment-events would be fired and handled by the callback.
+
+parameters:
+
+- eventsCallback: The batch new-comment-events handling function.
+
+### app.stop()
+
+Description:
+
+Stop the event engine
+
+------------------------
+
+## DIY APIs
+
+### let queryPostCommentAgent = lib.api.getQueryPostCommentAgent(options)
+
+Description:
+
+Initialize a agent for query post comments.
+
+parameters:
+
+- options: object with attribute `accessToken` which holding the required accessToken(need permission `manage_pages`) for the API calls.
+
+return:
+
+The agent object.
+
+### let postCommentFetcher = lib.api.getPostCommentFetcher(queryPostCommentAgent)
+
+Description:
+
+Initialize a fetcher for fetching new post comment.
+
+parameters:
+
+- queryPostCommentAgent: The agent object which come from `lib.api.getQueryPostCommentAgent(options)`
+
+return:
+
+The fetcher object.
+
+### let postCommentObj = await postCommentFetcher.fetch(postObjId, since)
+
+Description:
+
+Use the fetcher object to fetch post object with comments. We can use this API to get all new comments under the target post which those comments are created since the `since` time.
+
+parameters:
+
+- postObjId: The post object ID which is in format of `${pageId}_${postId}` in Facebook Graph API.
+- since: The timestamp in second
+
+return:
+
+The post object with comments (All comments child objects are new comments).
+
+### let postDigestor = lib.api.getPostDigestor();
+
+Description:
+
+Getting a digestor object which can turn the post-comment object from `postCommentFetcher.fetch()` result into new-comment-events.
+
+return:
+
+The digestor object.
+
+### let newCommentEvents = await postDigestor.digest(postWithNewComments)
+
+Description:
+
+Use the digestor object to digest post-comment object into new-comment-events
+
+parameters:
+
+- postWithNewComments: The post object with attaching new comments.
+
+return:
+
+New comment event objects
+
+------------------------
+
 ## Author
 
 - Eric Yu: airic.yu@gmail.com

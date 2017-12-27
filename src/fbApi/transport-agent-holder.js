@@ -6,15 +6,16 @@ const defaultAgent = require('./../utils/request-promise');
 
 const transportAgentHolder = {
     agent: defaultAgent,
+    defaultAgent: defaultAgent,
     getAgent: null,
     setAgent: null
 };
 
-transportAgentHolder.getAgent = function(){
+transportAgentHolder.getAgent = function () {
     return this.agent;
 }.bind(transportAgentHolder);
 
-transportAgentHolder.setAgent = function(agent){
+transportAgentHolder.setAgent = function (agent) {
     this.agent = agent;
 }.bind(transportAgentHolder);
 

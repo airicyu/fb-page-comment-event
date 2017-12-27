@@ -5,7 +5,7 @@
 const winston = require('winston');
 const defaultLogger = winston.createLogger({
     transports: [
-      new winston.transports.Console({ level: 'debug' })
+        new winston.transports.Console({ level: 'debug' })
     ]
 });
 
@@ -15,11 +15,11 @@ const loggerHolder = {
     setLogger: null
 };
 
-loggerHolder.getLogger = function(){
+loggerHolder.getLogger = function () {
     return this.logger;
 }.bind(loggerHolder);
 
-loggerHolder.setLogger = function(logger){
+loggerHolder.setLogger = function (logger) {
     this.logger = logger;
 }.bind(loggerHolder);
 

@@ -10,21 +10,21 @@ const silentLogger = winston.createLogger({
 });
 const moment = require('moment');
 
-describe('Test feed fetcher should correct fetch feeds', function () {
+describe('Test post-comment fetcger should correct fetch post-comments', function () {
     this.timeout(5000);
 
     let testPageId = '1620123456789123';
-    let testPostId = ['1620512345678912', '1620512345678934'];
+    let testPostId = '1620512345678912';
     let testFromUserName = 'John Chan';
     let testFromUserId = '10123456789123456';
     let testCommentId = ['1620720123456788', '1620720123456789'];
     let testCommentText = ['testing comment', 'another comment'];
 
-    let testData = [{
-            "id": `${testPageId}_${testPostId[0]}`,
-            "permalink_url": `https://www.facebook.com/permalink.php?story_fbid=${testPostId[0]}&id=${testPageId}`,
-            "comments": {
-                "data": [{
+    let testData = {
+        "id": `${testPageId}_${testPostId}`,
+        "permalink_url": `https://www.facebook.com/permalink.php?story_fbid=${testPostId}&id=${testPageId}`,
+        "comments": {
+            "data": [{
                     "message": testCommentText[0],
                     "created_time": moment().add(2, 'hours').format(),
                     "comment_count": 0,
@@ -34,20 +34,8 @@ describe('Test feed fetcher should correct fetch feeds', function () {
                     },
                     "id": `${testPostId}_${testCommentId[0]}`,
                     "permalink_url": `https://www.facebook.com/permalink.php?story_fbid=${testPostId}&id=${testPageId}&comment_id=${testCommentId[0]}`
-                }],
-                "paging": {
-                    "cursors": {
-                        "before": "abc",
-                        "after": "def"
-                    }
-                }
-            }
-        },
-        {
-            "id": `${testPageId}_${testPostId[1]}`,
-            "permalink_url": `https://www.facebook.com/permalink.php?story_fbid=${testPostId[1]}&id=${testPageId}`,
-            "comments": {
-                "data": [{
+                },
+                {
                     "message": testCommentText[1],
                     "created_time": moment().add(1, 'hours').format(),
                     "comment_count": 0,
@@ -57,28 +45,20 @@ describe('Test feed fetcher should correct fetch feeds', function () {
                     },
                     "id": `${testPostId}_${testCommentId[1]}`,
                     "permalink_url": `https://www.facebook.com/permalink.php?story_fbid=${testPostId}&id=${testPageId}&comment_id=${testCommentId[1]}`
-                }],
-                "paging": {
-                    "cursors": {
-                        "before": "abc",
-                        "after": "def"
-                    }
+                }
+            ],
+            "paging": {
+                "cursors": {
+                    "before": "abc",
+                    "after": "def"
                 }
             }
         }
-    ];
+    };
 
     let mockTransportAgent = async function (options) {
 
-        let dummyResponse = {
-            data: testData,
-            paging: {
-                cursors: {
-                    before: "WTI5",
-                    after: "WTI5"
-                }
-            }
-        };
+        let dummyResponse = testData;
 
         let uri = options.uri;
         return [{
@@ -95,7 +75,7 @@ describe('Test feed fetcher should correct fetch feeds', function () {
 
     before(function (done) {
         mockApp = lib.pageCommentEventApp({
-            monitorFeedPage: testPageId,
+            monitorPosts: [{ pageId: testPageId, postId: testPostId }],
             accessToken: 'yyyyyy'
         });
 
@@ -106,7 +86,7 @@ describe('Test feed fetcher should correct fetch feeds', function () {
         done();
     });
 
-    it("Test fetch feeds", function (done) {
+    it("Test fetch post-comment", function (done) {
         mockApp.run((events) => {
             expect(events).to.not.be.null;
             expect(events.length).to.gt(0);

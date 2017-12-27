@@ -1,22 +1,41 @@
 'use strict';
 
-/* Store for last checked notification item time in memory */
+/* Store for last checked status metadata in memory */
 
 const _store = {};
-_store['lastNotificationUpdateTime'] = Date.now();
-_store['lastScannedCommentTime'] = Math.round(Date.now()/1000);
+_store['pageFeedLastScannedCommentTime'] = {};
+_store['postLastScannedCommentTime'] = {};
 
 const store = {
-    getLastScannedCommentTime: null,
-    setLastScannedCommentTime: null
+    getPageFeedLastScannedCommentTime: null,
+    setPageFeedLastScannedCommentTime: null,
+    getPostLastScannedCommentTime: null,
+    setPostLastScannedCommentTime: null
 };
 
-store.getLastScannedCommentTime = async function () {
-    return _store['lastScannedCommentTime'];
+store.getPageFeedLastScannedCommentTime = async function (pageId) {
+    return _store['pageFeedLastScannedCommentTime'][pageId];
 };
 
-store.setLastScannedCommentTime = async function (value) {
-    _store['lastScannedCommentTime'] = value;
+store.setPageFeedLastScannedCommentTime = async function (pageId, value) {
+    if (value !== null) {
+        _store['pageFeedLastScannedCommentTime'][pageId] = value;
+    } else {
+        delete _store['pageFeedLastScannedCommentTime'][pageId];
+    }
+    return;
+};
+
+store.getPostLastScannedCommentTime = async function (postId) {
+    return _store['postLastScannedCommentTime'][postId];
+};
+
+store.setPostLastScannedCommentTime = async function (postId, value) {
+    if (value !== null) {
+        _store['postLastScannedCommentTime'][postId] = value;
+    } else {
+        delete _store['postLastScannedCommentTime'][postId];
+    }
     return;
 };
 

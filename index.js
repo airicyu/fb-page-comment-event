@@ -1,4 +1,4 @@
 'use strict';
 
-const getFbPageCommentEventApp = require('./src/main.js');
-module.exports = getFbPageCommentEventApp;
+const lib = require('./src/lib.js');
+module.exports = lib;

@@ -1,27 +1,27 @@
 'use strict';
 
-/* Digestor for digesting feed into events */
+/* Digestor for digesting posts into events */
 
-const getFeedDigestor = function () {
-    let feedDigestor = {
+const getPostDigestor = function () {
+    let postDigestor = {
         digest: null
     };
 
-    feedDigestor.digest = async function (feeds) {
+    postDigestor.digest = async function (posts) {
         let events = [];
-        feeds.forEach((feed)=>{
-            let id = feed.id;
-            let pageId = feed.id.split('_')[0] || null;
-            let postId = feed.id.split('_')[1] || null;
-            
-            let comments = feed.comments.data;
-            comments.forEach((comment)=>{
-                let commentId = comment.id.split('_')[1] || null;
+        posts.forEach((post) => {
+            let id = post.id;
+            let pageId = post.id.split('_')[0];
+            let postId = post.id.split('_')[1];
+
+            let comments = post.comments.data;
+            comments.forEach((comment) => {
+                let commentId = comment.id.split('_')[1];
                 let commentCreateTime = new Date(comment['created_time']).getTime();
                 let from = comment.from;
                 let link = comment.permalink_url;
                 let message = comment.message;
-                if (message.length>100) {
+                if (message.length > 100) {
                     message = message.substr(0, 100) + '...';
                 }
                 events.push({
@@ -39,9 +39,9 @@ const getFeedDigestor = function () {
             })
         });
         return events;
-    }.bind(feedDigestor);
+    }.bind(postDigestor);
 
-    return feedDigestor;
+    return postDigestor;
 }
 
-module.exports = getFeedDigestor;
+module.exports = getPostDigestor;

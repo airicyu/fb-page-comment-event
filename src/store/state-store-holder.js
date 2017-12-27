@@ -1,6 +1,6 @@
 'use strict';
 
-/* Holding the store for remembering last checked notification item time, next time we just check any items newer than that */
+/* Holding the store for remembering last checked status metadata */
 
 const defaultStore = require('./memory-state-store');
 
@@ -10,11 +10,11 @@ const stateStoreHolder = {
     setStore: null
 };
 
-stateStoreHolder.getStore = function(){
+stateStoreHolder.getStore = function () {
     return this.store;
 }.bind(stateStoreHolder);
 
-stateStoreHolder.setStore = function(store){
+stateStoreHolder.setStore = function (store) {
     this.store = store;
 }.bind(stateStoreHolder);
 

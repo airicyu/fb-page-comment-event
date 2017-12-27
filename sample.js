@@ -1,10 +1,15 @@
 'use strict';
 
-const fbPageCommentEventApp = require('./src/main.js')({
-    pageId : 'xxxxxx',
-    accessToken : 'yyyyyy'
+let fbPageCommentEventLib = require('fb-page-comment-event');
+
+const pageCommentEventApp = fbPageCommentEventLib.pageCommentEventApp({
+    accessToken: 'EAASHAlSbbMUBALwwZCxZB1T7eDvFZBR......GQfNPb5Bxo5b2wdzMb45gJxcdZAFOQZDZD',
+    pullInterval: 15 * 1000
 });
 
-fbPageCommentEventApp.run((events)=>{
+pageCommentEventApp.registerMonitorPost({ pageId: 'xxxxx', postId: 'yyyyy' });
+
+pageCommentEventApp.run((events) => {
     console.log(JSON.stringify(events, null, 2));
+    return;
 });

@@ -5,5 +5,6 @@
 const fbGraphApiEndpoint = `https://graph.facebook.com`;
 
 module.exports = {
-    fbGraphApiEndpoint
+    fbGraphApiEndpoint,
+    defaultFbApiVersion: 'v2.11'
 }
