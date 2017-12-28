@@ -83,7 +83,7 @@ lib.pageCommentEventApp = function (options) {
             { //fetch feed pages
                 let monitoringPageIds = self.getMonitorFeedPages();
                 for (let pageId of monitoringPageIds) {
-                    try{
+                    try {
                         let newItems = await self._internal.feedFetcher.fetch(pageId)
                         if (newItems && newItems.length) {
                             let events = await self._internal.postDigestor.digest(newItems);
@@ -91,7 +91,7 @@ lib.pageCommentEventApp = function (options) {
                                 return Promise.resolve(eventsCallback(events));
                             }
                         }
-                    } catch(e){
+                    } catch (e) {
                         loggerHolder.getLogger().error(e);
                     }
                 }
@@ -101,10 +101,10 @@ lib.pageCommentEventApp = function (options) {
                 let newItems = [];
                 let monitoringPostIds = self.getMonitorPosts();
                 for (let postId of monitoringPostIds) {
-                    try{
+                    try {
                         let newItems_ = await self._internal.postCommentFetcher.fetch(postId)
                         newItems.push(...newItems_);
-                    } catch(e){
+                    } catch (e) {
                         loggerHolder.getLogger().error(e);
                     }
                 }

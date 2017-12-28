@@ -6,7 +6,7 @@ const expect = require('chai').expect;
 const postDigestor = require('./../src/events/post-digestor')();
 
 let longText = '0123456789';
-for(let i=0; i<5; i++){
+for (let i = 0; i < 5; i++) {
     longText += longText;
 }
 
@@ -91,7 +91,7 @@ const expectEvents = [{
             "name": testFromUserName,
             "id": testFromUserId
         },
-        "message": testCommentText[1].substr(0,100) + '...',
+        "message": testCommentText[1].substr(0, 100) + '...',
         "commentCreateTime": 1513785116000,
         "link": `https://www.facebook.com/permalink.php?story_fbid=${testPostId}&id=${testPageId}&comment_id=${testCommentId[1]}`
     }

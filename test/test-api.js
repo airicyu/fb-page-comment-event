@@ -102,16 +102,16 @@ describe('Test monitor event app', function () {
             let dummyAccessToken = 'XXX...ZZZ';
             lib.setQueryAgent(mockTransportAgent);
 
-            let queryFeedAgent = lib.api.getQueryFeedAgent({accessToken: dummyAccessToken});
+            let queryFeedAgent = lib.api.getQueryFeedAgent({ accessToken: dummyAccessToken });
             let feedFetcher = lib.api.getFeedFetcher(queryFeedAgent);
             let newItems = await feedFetcher.fetch(testPageId);
-            
+
             expect(newItems.length).gt(0);
-            
-            
+
+
             lib.setQueryAgent(mockTransportAgent2);
 
-            let queryPostCommentAgent = lib.api.getQueryPostCommentAgent({accessToken: dummyAccessToken});
+            let queryPostCommentAgent = lib.api.getQueryPostCommentAgent({ accessToken: dummyAccessToken });
             let postCommentFetcher = lib.api.getPostCommentFetcher(queryPostCommentAgent);
             let newItems2 = await postCommentFetcher.fetch(`${testPageId}_${testPostId}`);
 
@@ -124,7 +124,7 @@ describe('Test monitor event app', function () {
 
             expect(event.length).gt(0);
             expect(event2.length).gt(0);
-            
+
         })().then(() => {
             done();
         });
